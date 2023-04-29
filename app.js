@@ -297,3 +297,5 @@ endButton.addEventListener("click", stopGame = () => {
     nctButton.classList.remove("hide");
     clearInterval(interval);
 })
+
+//
