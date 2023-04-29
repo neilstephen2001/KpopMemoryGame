@@ -145,7 +145,7 @@ button {
     border: 3px solid #000000;
     margin: 0.5em 0.5em 0.5em 0.5em;
     position: relative;
-    top: -75px;
+    top: -100px;
 }
 .controls button span {
     font-size: 1.8em;
@@ -157,7 +157,7 @@ button {
 #result, #welcome {
     text-align: center;
     position: relative;
-    top: -75px;
+    top: -100px;
 }
 .controls h3 {
     font-size: 2.5em;
@@ -171,5 +171,5 @@ button {
 .controls h5 {
     font-size: 1.8em;
     font-weight: 500;
-    margin: 0.5em 0 0 0;
+    margin: 0.75em 0 0 0;
 }

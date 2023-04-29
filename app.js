@@ -187,6 +187,7 @@ const puzzleGenerator = (cardNames, size, artist) => {
                             let minutesElapsed = minutes < 10 ? `0${minutes}` : minutes;
                             setTimeout(() => {result.innerHTML = 
                             `<h3>Well done!</h3>
+                            <h4> Group: ${artist.toUpperCase()}</h4>
                             <h4> Moves: ${moves}</h4>
                             <h4>Time: ${minutesElapsed}:${secondsElapsed}</h4>
                             <h5>Choose a group:</h5>`;
