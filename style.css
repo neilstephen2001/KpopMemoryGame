@@ -48,8 +48,10 @@ body {
 .stats span {
     font-weight: 600;
 }
-.card {
+.card, .blank {
     position: relative;
+}
+.card {
     cursor: pointer;
 }
 .card[artist="exo"] {
@@ -60,7 +62,11 @@ body {
     width: 4.5em;
     height: 4.5em;
 }
-.front, .back {
+.card[artist="svt"], .blank {
+    width: 5.52em;
+    height: 5.52em;
+}
+.front, .back, .free {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -83,6 +89,10 @@ body {
 .back img {
     max-width: 90%;
     border-radius: 4.5px;
+}
+.free img {
+    max-width: 75%;
+    border-radius: 5px;
 }
 .card.flipped .front {
     transform: rotateY(180deg);

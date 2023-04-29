@@ -1,6 +1,7 @@
 const movesCount = document.getElementById("moves");
 const timeElapsed = document.getElementById("time");
 const exoButton = document.getElementById("exo");
+const svtButton = document.getElementById("svt");
 const nctButton = document.getElementById("nct");
 const endButton = document.getElementById("end");
 const gameContainer = document.getElementById("game");
@@ -29,7 +30,21 @@ const exo_items = [
     {name: "kai",       image:"exo/kai.jpg"},
     {name: "sehun",     image:"exo/sehun.jpg"}
 ];
-
+const svt_items = [
+    {name: "s.coups",   image:"svt/scoups.jpg"},
+    {name: "jeonghan",  image:"svt/jeonghan.png"},
+    {name: "joshua",    image:"svt/joshua.jpg"},
+    {name: "jun",       image:"svt/jun.jpg"},
+    {name: "wonwoo",    image:"svt/wonwoo.jpg"},
+    {name: "hoshi",     image:"svt/hoshi.jpg"},
+    {name: "woozi",     image:"svt/woozi.jpg"},
+    {name: "mingyu",    image:"svt/mingyu.jpg"},
+    {name: "d.k.",      image:"svt/dk.jpeg"},
+    {name: "the8",      image:"svt/the8.jpg"},
+    {name: "seungkwan", image:"svt/seungkwan.jpg"},
+    {name: "vernon",    image:"svt/vernon.jpg"},
+    {name: "dino",      image:"svt/dino.jpg"}
+]
 const nct_items = [
     {name: "taeil",     image:"nct/taeil.jpg"},
     {name: "johnny",    image:"nct/johnny.jpg"},
@@ -85,10 +100,11 @@ const selectRandomItems = (size) => {
     // Temporary array to store unselected items
     let temp = [...items];
     let cardNames = [];
-    size = (size ** 2) / 2;
+    sizeTemp = Math.floor((size ** 2) / 2);
+    console.log(sizeTemp);
 
     // Select a random item then remove from temporary array
-    for (i = 0; i < size; i++) {
+    for (i = 0; i < sizeTemp; i++) {
         const randomIndex = Math.floor(Math.random() * temp.length);
         cardNames.push(temp[randomIndex]);
         temp.splice(randomIndex, 1);
@@ -102,10 +118,11 @@ const puzzleGenerator = (cardNames, size, artist) => {
     gameContainer.innerHTML = "";
     cardNames = [...cardNames, ...cardNames];
     cardNames.sort(() => Math.random() - 0.5);
+    console.log(cardNames)
 
     // Create cards
-    // Front side contains EXO logo
-    // Back side contains photo of EXO member
+    // Front side contains logo
+    // Back side contains photo of member
     for (i = 0; i < size ** 2; i++) {
         if (artist == "exo") {
             gameContainer.innerHTML += 
@@ -113,15 +130,29 @@ const puzzleGenerator = (cardNames, size, artist) => {
                 <div class="front"><img src="exo/exo_icon.jpg" class="image"></div>
                 <div class="back"><img src="${cardNames[i].image}" class="image"></div>
             </div>`;
-        } else {
+        } else if (artist == "nct") {
             gameContainer.innerHTML += 
             `<div class="card" artist="nct" card-value="${cardNames[i].name}">
                 <div class="front"><img src="nct/nct_icon.jpg" class="image"></div>
                 <div class="back"><img src="${cardNames[i].image}" class="image"></div>
             </div>`
+        } else {
+            console.log(i)
+            // bottom right is a free spot since there is an odd number of cards
+            if (i == 24) {
+                gameContainer.innerHTML += 
+                `<div class="blank">
+                    <div class="free"><img src="svt/carat.png" class="image"></div>
+                </div>`
+            } else {
+                gameContainer.innerHTML += 
+                `<div class="card" artist="svt" card-value="${cardNames[i].name}">
+                    <div class="front"><img src="svt/svt_icon.webp" class="image"></div>
+                    <div class="back"><img src="${cardNames[i].image}" class="image"></div>
+                </div>`
+            }
         }
     }
-
     // Generate grid
     gameContainer.style.gridTemplateRows = `repeat(${size}, auto)`;
     gameContainer.style.gridTemplateColumns = `repeat(${size}, auto)`;
@@ -200,6 +231,28 @@ exoButton.addEventListener("click", () => {
     artist = "exo";
     size = 4;
     artistName.innerHTML = `<span>EXO</span>`;
+    timeElapsed.innerHTML = `<span>Time: </span>00:00`;
+    // Hide start button and its container
+    controlsContainer.classList.add("hide");
+    endButton.classList.remove("hide");
+    exoButton.classList.add("hide");
+    nctButton.classList.add("hide");
+    // Start timer
+    interval = setInterval(timeGenerator, 1000);
+    movesCount.innerHTML = `<span>Moves: </span>${moves}`;
+    initialiseGame();
+})
+
+svtButton.addEventListener("click", () => {
+    // Initialise move count and time
+    moves = 0;
+    seconds = 0;
+    minutes = 0;
+    // Initialise game parameters
+    items = svt_items;
+    artist = "svt";
+    size = 5;
+    artistName.innerHTML = `<span>SEVENTEEN</span>`;
     timeElapsed.innerHTML = `<span>Time: </span>00:00`;
     // Hide start button and its container
     controlsContainer.classList.add("hide");
