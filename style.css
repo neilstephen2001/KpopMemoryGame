@@ -28,6 +28,18 @@ body {
     width: 100%;
     gap: 0.6em;
 }
+.heading {
+    display: flex;
+    justify-content: space-between;
+    color: #000000;
+}
+#name span {
+    text-align: left;
+    justify-content: center;
+    margin-bottom: 1.2em;
+    font-size: 2.5em;
+    font-weight: 600;
+}
 .stats {
     text-align: right;
     margin-bottom: 1.2em;
@@ -114,13 +126,17 @@ button {
     color: #000000;
     background-color: #ffffff;
     display: inline-block;
-    font-size: 1.8em;
-    font-weight: 600;
+    font-size: 1.2em;
+    font-weight: 500;
     box-shadow: 0 0.6em 2em rgba(86,66,0,0.2);
     border: 3px solid #000000;
     margin: 0.5em 0.5em 0.5em 0.5em;
     position: relative;
     top: -75px;
+}
+.controls button span {
+    font-size: 1.8em;
+    font-weight: 600;
 }
 .hide {
     display: none;

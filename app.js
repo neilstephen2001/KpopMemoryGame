@@ -6,6 +6,7 @@ const endButton = document.getElementById("end");
 const gameContainer = document.getElementById("game");
 const welcome = document.getElementById("welcome");
 const result = document.getElementById("result");
+const artistName = document.getElementById("name");
 const controlsContainer = document.querySelector(".controls");
 
 let cards;
@@ -198,6 +199,8 @@ exoButton.addEventListener("click", () => {
     items = exo_items;
     artist = "exo";
     size = 4;
+    artistName.innerHTML = `<span>EXO</span>`;
+    timeElapsed.innerHTML = `<span>Time: </span>00:00`;
     // Hide start button and its container
     controlsContainer.classList.add("hide");
     endButton.classList.remove("hide");
@@ -218,6 +221,8 @@ nctButton.addEventListener("click", () => {
     items = nct_items;
     artist = "nct";
     size = 6;
+    artistName.innerHTML = `<span>NCT</span>`;
+    timeElapsed.innerHTML = `<span>Time: </span>00:00`;
     // Hide start button and its container
     controlsContainer.classList.add("hide");
     endButton.classList.remove("hide");
