@@ -4,6 +4,7 @@ const exoButton = document.getElementById("exo");
 const nctButton = document.getElementById("nct");
 const endButton = document.getElementById("end");
 const gameContainer = document.getElementById("game");
+const welcome = document.getElementById("welcome");
 const result = document.getElementById("result");
 const controlsContainer = document.querySelector(".controls");
 
@@ -38,8 +39,8 @@ const nct_items = [
     {name: "ten",       image:"nct/ten.jpg"},
     {name: "jaehyun",   image:"nct/jaehyun.jpg"},
     {name: "winwin",    image:"nct/winwin.jpg"},
-    {name: "jungwoo",   image:"nct/jungwoo.jpg"},
-    {name: "lucas",     image:"nct/lucas.jpg"},
+    {name: "jungwoo",   image:"nct/jungwoo.jpeg"},
+    {name: "lucas",     image:"nct/lucas.png"},
     {name: "mark",      image:"nct/mark.jpg"},
     {name: "xiaojun",   image:"nct/xiaojun.jpg"},
     {name: "hendery",   image:"nct/hendery.jpg"},
@@ -50,7 +51,7 @@ const nct_items = [
     {name: "yangyang",  image:"nct/yangyang.jpg"},
     {name: "shotaro",   image:"nct/shotaro.jpg"},
     {name: "sungchan",  image:"nct/sungchan.jpg"},
-    {name: "chenle",    image:"nct/chenle.jpg"},
+    {name: "chenle",    image:"nct/chenle.jpeg"},
     {name: "jisung",    image:"nct/jisung.jpg"}
 ];
 
@@ -150,10 +151,16 @@ const puzzleGenerator = (cardNames, size, artist) => {
                         // Check if it equals half the number of cards
                         wins++;
                         if (wins == Math.floor(cards.length / 2)) {
+                            let secondsElapsed = seconds < 10 ? `0${seconds}` : seconds;
+                            let minutesElapsed = minutes < 10 ? `0${minutes}` : minutes;
                             setTimeout(() => {result.innerHTML = 
-                            `<h3>You won!</h3><h4> Moves: ${moves}</h4>`;
+                            `<h3>Well done!</h3>
+                            <h4> Moves: ${moves}</h4>
+                            <h4>Time: ${minutesElapsed}:${secondsElapsed}</h4>
+                            <h5>Choose a group:</h5>`;
                             stopGame();
-                            }, 1000);
+                            welcome.classList.add("hide");
+                            }, 500);
                         } 
                     } else {
                         // If the cards don't match, flip both around
@@ -225,6 +232,7 @@ nctButton.addEventListener("click", () => {
 // End game
 endButton.addEventListener("click", stopGame = () => {
     controlsContainer.classList.remove("hide");
+    welcome.classList.remove("hide");
     endButton.classList.add("hide");
     exoButton.classList.remove("hide");
     nctButton.classList.remove("hide");
