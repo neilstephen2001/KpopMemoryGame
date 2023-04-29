@@ -30,9 +30,9 @@ let moves = 0, wins = 0;
 
 // Timer
 const timeGenerator = () => {
-    seconds += 1;
+    seconds++;
     if (seconds >= 60) {
-        minutes += 1;
+        minutes++;
         seconds = 0;
     }
 
@@ -44,7 +44,7 @@ const timeGenerator = () => {
 
 // Moves count
 const movesCounter = () => {
-    moves += 1;
+    moves++;
     movesCount.innerHTML = `<span>Moves:</span>${moves}`;
 };
 
@@ -109,12 +109,12 @@ const puzzleGenerator = (cardNames, size = 4) => {
                         firstCard = false;
                         // Increment win count
                         // Check if it equals half the number of cards
-                        wins += 1;
-                        if (wins == size ** 2 / 2) {
-                            result.innerHTML = 
-                            `<h3>Congratulations, you won!</h3>
-                            <h4> Moves: ${move}</h4>`;
+                        wins++;
+                        if (wins == Math.floor(cards.length / 2)) {
+                            setTimeout(() => {result.innerHTML = 
+                            `<h3>You won!</h3><h4> Moves: ${moves}</h4>`;
                             stopGame();
+                            }, 1000);
                         } 
                     } else {
                         // If the cards don't match, flip both around
