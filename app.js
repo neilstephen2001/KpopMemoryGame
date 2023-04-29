@@ -127,13 +127,13 @@ const puzzleGenerator = (cardNames, size, artist) => {
         if (artist == "exo") {
             gameContainer.innerHTML += 
             `<div class="card" artist="exo" card-value="${cardNames[i].name}">
-                <div class="front"><img src="exo/exo_icon.jpg" class="image"></div>
+                <div class="front"><img src="exo/exo_logo2.jpeg" class="image"></div>
                 <div class="back"><img src="${cardNames[i].image}" class="image"></div>
             </div>`;
         } else if (artist == "nct") {
             gameContainer.innerHTML += 
             `<div class="card" artist="nct" card-value="${cardNames[i].name}">
-                <div class="front"><img src="nct/nct_icon.jpg" class="image"></div>
+                <div class="front"><img src="nct/nct_logo.jpg" class="image"></div>
                 <div class="back"><img src="${cardNames[i].image}" class="image"></div>
             </div>`
         } else {
@@ -142,12 +142,12 @@ const puzzleGenerator = (cardNames, size, artist) => {
             if (i == 24) {
                 gameContainer.innerHTML += 
                 `<div class="blank">
-                    <div class="free"><img src="svt/carat.png" class="image"></div>
+                    <div class="free"><img src="svt/svt_icon.webp" class="image"></div>
                 </div>`
             } else {
                 gameContainer.innerHTML += 
                 `<div class="card" artist="svt" card-value="${cardNames[i].name}">
-                    <div class="front"><img src="svt/svt_icon.webp" class="image"></div>
+                    <div class="front"><img src="svt/svt_icon2.png" class="image"></div>
                     <div class="back"><img src="${cardNames[i].image}" class="image"></div>
                 </div>`
             }
@@ -192,7 +192,7 @@ const puzzleGenerator = (cardNames, size, artist) => {
                             <h5>Choose a group:</h5>`;
                             stopGame();
                             welcome.classList.add("hide");
-                            }, 500);
+                            }, 1000);
                         } 
                     } else {
                         // If the cards don't match, flip both around

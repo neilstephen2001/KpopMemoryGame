@@ -86,6 +86,9 @@ body {
     max-width: 75%;
     border-radius: 5px;
 }
+.card[artist="nct"] .front img{
+    opacity: 0.8;
+}
 .back img {
     max-width: 90%;
     border-radius: 4.5px;
