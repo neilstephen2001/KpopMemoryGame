@@ -1,6 +1,7 @@
 const movesCount = document.getElementById("moves");
 const timeElapsed = document.getElementById("time");
-const startButton = document.getElementById("start");
+const exoButton = document.getElementById("exo");
+const nctButton = document.getElementById("nct");
 const endButton = document.getElementById("end");
 const gameContainer = document.getElementById("game");
 const result = document.getElementById("result");
@@ -10,18 +11,47 @@ let cards;
 let interval;
 let firstCard = false;
 let secondCard = false;
+let items;
+let artist;
+let size;
 
 // Items array
-const items = [
-    {name: "suho", image:"images/suho.jpg"},
-    {name: "xiumin", image:"images/xiumin.jpg"},
-    {name: "lay", image:"images/lay.jpg"},
-    {name: "baekhyun", image:"images/baekhyun.jpg"},
-    {name: "chen", image:"images/chen.jpg"},
-    {name: "chanyeol", image:"images/chanyeol.jpg"},
-    {name: "d.o.", image:"images/do.jpg"},
-    {name: "kai", image:"images/kai.jpg"},
-    {name: "sehun", image:"images/sehun.jpg"}
+const exo_items = [
+    {name: "suho",      image:"exo/suho.jpg"},
+    {name: "xiumin",    image:"exo/xiumin.jpg"},
+    {name: "lay",       image:"exo/lay.jpg"},
+    {name: "baekhyun",  image:"exo/baekhyun.jpg"},
+    {name: "chen",      image:"exo/chen.jpg"},
+    {name: "chanyeol",  image:"exo/chanyeol.jpg"},
+    {name: "d.o.",      image:"exo/do.jpg"},
+    {name: "kai",       image:"exo/kai.jpg"},
+    {name: "sehun",     image:"exo/sehun.jpg"}
+];
+
+const nct_items = [
+    {name: "taeil",     image:"nct/taeil.jpg"},
+    {name: "johnny",    image:"nct/johnny.jpg"},
+    {name: "taeyong",   image:"nct/taeyong.jpg"},
+    {name: "yuta",      image:"nct/yuta.jpg"},
+    {name: "kun",       image:"nct/kun.jpg"},
+    {name: "doyoung",   image:"nct/doyoung.jpg"},
+    {name: "ten",       image:"nct/ten.jpg"},
+    {name: "jaehyun",   image:"nct/jaehyun.jpg"},
+    {name: "winwin",    image:"nct/winwin.jpg"},
+    {name: "jungwoo",   image:"nct/jungwoo.jpg"},
+    {name: "lucas",     image:"nct/lucas.jpg"},
+    {name: "mark",      image:"nct/mark.jpg"},
+    {name: "xiaojun",   image:"nct/xiaojun.jpg"},
+    {name: "hendery",   image:"nct/hendery.jpg"},
+    {name: "renjun",    image:"nct/renjun.jpg"},
+    {name: "jeno",      image:"nct/jeno.jpg"},
+    {name: "haechan",   image:"nct/haechan.jpg"},
+    {name: "jaemin",    image:"nct/jaemin.jpg"},
+    {name: "yangyang",  image:"nct/yangyang.jpg"},
+    {name: "shotaro",   image:"nct/shotaro.jpg"},
+    {name: "sungchan",  image:"nct/sungchan.jpg"},
+    {name: "chenle",    image:"nct/chenle.jpg"},
+    {name: "jisung",    image:"nct/jisung.jpg"}
 ];
 
 // Initial stats
@@ -45,11 +75,11 @@ const timeGenerator = () => {
 // Moves count
 const movesCounter = () => {
     moves++;
-    movesCount.innerHTML = `<span>Moves:</span>${moves}`;
+    movesCount.innerHTML = `<span>Moves: </span>${moves}`;
 };
 
 // Pick random items from the items array
-const selectRandomItems = (size = 4) => {
+const selectRandomItems = (size) => {
     // Temporary array to store unselected items
     let temp = [...items];
     let cardNames = [];
@@ -65,7 +95,7 @@ const selectRandomItems = (size = 4) => {
 };
 
 // Generate a puzzle grid
-const puzzleGenerator = (cardNames, size = 4) => {
+const puzzleGenerator = (cardNames, size, artist) => {
     // Generate two of each card then shuffle the order
     gameContainer.innerHTML = "";
     cardNames = [...cardNames, ...cardNames];
@@ -75,14 +105,23 @@ const puzzleGenerator = (cardNames, size = 4) => {
     // Front side contains EXO logo
     // Back side contains photo of EXO member
     for (i = 0; i < size ** 2; i++) {
-        gameContainer.innerHTML += 
-        `<div class="card" card-value="${cardNames[i].name}">
-            <div class="front"><img src="images/exo_icon.jpg" class="image"></div>
-            <div class="back"><img src="${cardNames[i].image}" class="image"></div>
-        </div>`;
+        if (artist == "exo") {
+            gameContainer.innerHTML += 
+            `<div class="card" artist="exo" card-value="${cardNames[i].name}">
+                <div class="front"><img src="exo/exo_icon.jpg" class="image"></div>
+                <div class="back"><img src="${cardNames[i].image}" class="image"></div>
+            </div>`;
+        } else {
+            gameContainer.innerHTML += 
+            `<div class="card" artist="nct" card-value="${cardNames[i].name}">
+                <div class="front"><img src="nct/nct_icon.jpg" class="image"></div>
+                <div class="back"><img src="${cardNames[i].image}" class="image"></div>
+            </div>`
+        }
     }
 
     // Generate grid
+    gameContainer.style.gridTemplateRows = `repeat(${size}, auto)`;
     gameContainer.style.gridTemplateColumns = `repeat(${size}, auto)`;
 
     // Cards
@@ -137,21 +176,46 @@ const puzzleGenerator = (cardNames, size = 4) => {
 const initialiseGame = () => {
     result.innerText = "";
     wins = 0;
-    cards = selectRandomItems();
+    cards = selectRandomItems(size);
     console.log(cards);
-    puzzleGenerator(cards);
+    puzzleGenerator(cards, size, artist);
 };
 
 // Start game
-startButton.addEventListener("click", () => {
+exoButton.addEventListener("click", () => {
     // Initialise move count and time
     moves = 0;
     seconds = 0;
     minutes = 0;
+    // Initialise game parameters
+    items = exo_items;
+    artist = "exo";
+    size = 4;
     // Hide start button and its container
     controlsContainer.classList.add("hide");
     endButton.classList.remove("hide");
-    startButton.classList.add("hide");
+    exoButton.classList.add("hide");
+    nctButton.classList.add("hide");
+    // Start timer
+    interval = setInterval(timeGenerator, 1000);
+    movesCount.innerHTML = `<span>Moves: </span>${moves}`;
+    initialiseGame();
+})
+
+nctButton.addEventListener("click", () => {
+    // Initialise move count and time
+    moves = 0;
+    seconds = 0;
+    minutes = 0;
+    // Initialise game parameters
+    items = nct_items;
+    artist = "nct";
+    size = 6;
+    // Hide start button and its container
+    controlsContainer.classList.add("hide");
+    endButton.classList.remove("hide");
+    exoButton.classList.add("hide");
+    nctButton.classList.add("hide");
     // Start timer
     interval = setInterval(timeGenerator, 1000);
     movesCount.innerHTML = `<span>Moves: </span>${moves}`;
@@ -162,6 +226,7 @@ startButton.addEventListener("click", () => {
 endButton.addEventListener("click", stopGame = () => {
     controlsContainer.classList.remove("hide");
     endButton.classList.add("hide");
-    startButton.classList.remove("hide");
+    exoButton.classList.remove("hide");
+    nctButton.classList.remove("hide");
     clearInterval(interval);
 })

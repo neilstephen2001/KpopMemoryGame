@@ -13,7 +13,7 @@ body {
     box-sizing: content-box;
     background: #f8f8f8;
     position: absolute;
-    width: 26.87em;
+    width: 30em;
     padding: 2.5em 3em;
     left: 50%;
     top: 50%;
@@ -37,9 +37,15 @@ body {
 }
 .card {
     position: relative;
-    width: 6.25em;
-    height: 6.25em;
     cursor: pointer;
+}
+.card[artist="exo"] {
+    width: 7.05em;
+    height: 7.05em;
+}
+.card[artist="nct"] {
+    width: 4.5em;
+    height: 4.5em;
 }
 .front, .back {
     position: absolute;
