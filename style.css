@@ -111,6 +111,7 @@ button {
     font-weight: 600;
 }
 .controls button {
+    color: #000000;
     background-color: #ffffff;
     display: inline-block;
     font-size: 1.8em;
