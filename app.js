@@ -65,32 +65,101 @@ function selectRandomItems(size = 4) {
 }
 
 // Generate a puzzle grid
-function puzzleGenerator (cards, size = 4) {
+function puzzleGenerator (cardNames, size = 4) {
     // Generate two of each card then shuffle the order
     gameContainer.innerHTML = "";
-    cards = [...cards, ...cards];
-    cards.sort(() => Math.random() - 0.5);
+    cardNames = [...cards, ...cards];
+    cardNames.sort(() => Math.random() - 0.5);
 
     // Create cards
     // Front side contains EXO logo
     // Back side contains photo of EXO member
     for (i = 0; i < size ** 2; i++) {
         gameContainer.innerHTML += 
-        `<div class="card" card-value="${cards[i].name}">
+        `<div class="card" card-value="${cardNames[i].name}">
             <div class="front"><img src="images/exo_icon.jpg" class="image"></div>
-            <div class="back"><img src="${cards[i].image}" class="image"></div>
+            <div class="back"><img src="${cardNames[i].image}" class="image"></div>
         </div>`;
     }
+
+    // Generate grid
     gameContainer.style.gridTemplateColumns = `repeat(${size}, auto)`;
+
+    // Cards
+    cards = document.querySelectorAll(".card");
+    cards.forEach((card) => {
+        card.addEventListener("click", () => {
+            // Flip a clicked card if it is unmatched
+            // Set card to the first/second selected card and store its value
+            if (!card.classList.contains("matched")) {
+                card.classList.add("flipped");
+                if (!firstCard) {
+                    firstCard = card;
+                    firstCardValue = card.getAttribute("card-value");
+                }
+            } else {
+                movesCounter();
+                secondCard = card;
+                secondCardValue = card.getAttribute("card-value");
+                // Compare the values of first and second card
+                if (firstCardValue == secondCardValue) {
+                    // If the cards match, add a matched attribute to the card
+                    firstCard.classList.add("matched");
+                    secondCard.classList.add("matched");
+                    firstCard = false;
+                    // Increment win count
+                    // Check if it equals half the number of cards
+                    wins++;
+                    if (wins == Math.floor(cards.length / 2)) {
+                        result.innerHTML = 
+                        `<h3>Congratulations, you won!</h3>
+                        <h4> Moves: ${move}</h4>`;
+                        stopGame();
+                    } else {
+                        // If the cards don't match, flip both around
+                        tempFirstCard = firstCard;
+                        tempSecondCard = secondCard;
+                        firstCard = false;
+                        secondCard = false;
+                        let delay = setTimeout(() => {
+                            tempFirstCard.classList.remove("flipped");
+                            tempSecondCard.classList.remove("flipped");
+                        }, 900);
+                    } 
+                }
+            }
+        })
+    })
 }
 
 // Initialise game
 function initialiseGame() {
     result.innerText = "";
-    winCount = 0;
+    wins = 0;
     cards = selectRandomItems();
     console.log(cards);
     puzzleGenerator(cards);
 }
 
-initialiseGame();
+// Start game
+startButton.addEventListener("click", () => {
+    // Initialise move count and time
+    moves = 0;
+    time = 0;
+    // Hide start button and its container
+    controlsContainer.classList.add("hide");
+    endButton.classList.remove("hide");
+    startButton.classList.add("hide");
+    // Start timer
+    interval = setInterval(timeGenerator(), 1000);
+    movesCount.innerHTML = `<span>Moves: </span>${moves}`;
+    initialiseGame();
+})
+
+// End game
+endButton.addEventListener("click", stopGame = () => {
+    controlsContainer.classList.remove("hide");
+    endButton.classList.add("hide");
+    startButton.classList.remove("hide");
+    clearInterval(interval);
+})

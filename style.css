@@ -32,6 +32,13 @@ body {
     display: grid;
     gap: 0.6em;
 }
+.stats {
+    text-align: right;
+    margin-bottom: 1.2em;
+}
+.stats span {
+    font-weight: 600;
+}
 .card {
     position: relative;
     width: 6.25em;
@@ -62,9 +69,50 @@ body {
     max-width: 90%;
     border-radius: 4.5px;
 }
-.card.flip.front {
+.card.flipped.front {
     transform: rotateY(180deg);
 }
-.card.flip.back {
+.card.flipped.back {
     transform: rotateY(0deg);
+}
+.controls {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-color: #fff8e7;
+}
+button {
+    border: none;
+    border-radius: 0.3em;
+    padding: 1em 1.5em;
+    cursor: pointer;
+}
+.wrapper button {
+    font-size: 1.1em;
+    display: block;
+    margin: 1.1em auto 0 auto;
+    color: #000000;
+    border: 2px solid #000000;
+}
+.controls button {
+    font-size: 1.3em;
+    box-shadow: 0 0.6em 2em rgba(86,66,0,0.2);
+    border: 2px solid #000000;
+}
+.hide {
+    display: none;
+}
+#result {
+    text-align: center;
+}
+#result h3 {
+    font-size: 2.5em;
+}
+#result h4 {
+    font-size: 1.8em;
+    margin: 0.6em 0 1em 0;
 }
