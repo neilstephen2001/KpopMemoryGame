@@ -5,16 +5,30 @@
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
+
 body {
-    display: flex;
+    /*display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    min-height: 100vh;*/
     background-color: #fff8e7;
 }
-.card .back img {
-    max-width: 45px;
+
+.wrapper {
+    box-sizing: border-box;
+    width: 26.87em;
+    padding: 2.5em 3em;
+    background: #f8f8f8;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    border-radius: 0.6em;
+    border: 1px solid #000000;
+    box-shadow: 0 0.9em 2.8em rgba(0, 0, 0, 0.15);  
 }
-.card .front img {
-    max-width: 45px;
+.game {
+    position: relative;
+    width: 100%;
+    display: grid;
 }
