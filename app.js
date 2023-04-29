@@ -2,7 +2,7 @@ const movesCount = document.getElementById("moves");
 const timeElapsed = document.getElementById("time");
 const startButton = document.getElementById("start");
 const endButton = document.getElementById("end");
-const gameContainer = document.querySelector(".game");
+const gameContainer = document.getElementById("game");
 const result = document.getElementById("result");
 const controlsContainer = document.querySelector(".controls");
 
@@ -13,15 +13,15 @@ let secondCard = false;
 
 // Items array
 const items = [
-    {name: "suho", image:"images/suho.png"},
-    {name: "xiumin", image:"images/xiumin.png"},
-    {name: "lay", image:"images/lay.png"},
-    {name: "baekhyun", image:"images/baekhyun.png"},
-    {name: "chen", image:"images/chen.png"},
-    {name: "chanyeol", image:"images/chanyeol.png"},
-    {name: "d.o.", image:"images/do.png"},
-    {name: "kai", image:"images/kai.png"},
-    {name: "sehun", image:"images/sehun.png"}
+    {name: "suho", image:"images/suho.jpg"},
+    {name: "xiumin", image:"images/xiumin.jpg"},
+    {name: "lay", image:"images/lay.jpg"},
+    {name: "baekhyun", image:"images/baekhyun.jpg"},
+    {name: "chen", image:"images/chen.jpg"},
+    {name: "chanyeol", image:"images/chanyeol.jpg"},
+    {name: "d.o.", image:"images/do.jpg"},
+    {name: "kai", image:"images/kai.jpg"},
+    {name: "sehun", image:"images/sehun.jpg"}
 ];
 
 // Initial stats
@@ -49,7 +49,7 @@ function movesCounter() {
 }
 
 // Pick random items from the items array
-function generateRandom(size = 4) {
+function selectRandomItems(size = 4) {
     // Temporary array to store unselected items
     let temp = [...items];
     let cards = [];
@@ -64,21 +64,33 @@ function generateRandom(size = 4) {
     return cards;
 }
 
-// Generate a matrix
-function matrixGenerator (cards, size = 4) {
+// Generate a puzzle grid
+function puzzleGenerator (cards, size = 4) {
     // Generate two of each card then shuffle the order
     gameContainer.innerHTML = "";
     cards = [...cards, ...cards];
     cards.sort(() => Math.random() - 0.5);
-    for (i = 0; i < size ** 2; i++) {
 
+    // Create cards
+    // Front side contains EXO logo
+    // Back side contains photo of EXO member
+    for (i = 0; i < size ** 2; i++) {
+        gameContainer.innerHTML += 
+        `<div class="card" card-value="${cards[i].name}">
+            <div class="front"><img src="images/exo_icon.jpg" class="image"></div>
+            <div class="back"><img src="${cards[i].image}" class="image"></div>
+        </div>`;
     }
+    gameContainer.style.gridTemplateColumns = `repeat(${size}, auto)`;
 }
 
 // Initialise game
-function initialiser() {
+function initialiseGame() {
     result.innerText = "";
     winCount = 0;
-    cards = generateRandom();
-    matrixGenerator(cards);
+    cards = selectRandomItems();
+    console.log(cards);
+    puzzleGenerator(cards);
 }
+
+initialiseGame();
