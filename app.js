@@ -29,10 +29,10 @@ let seconds = 0, minutes = 0;
 let moves = 0, wins = 0;
 
 // Timer
-function timeGenerator() {
-    seconds++;
+const timeGenerator = () => {
+    seconds += 1;
     if (seconds >= 60) {
-        minutes++;
+        minutes += 1;
         seconds = 0;
     }
 
@@ -43,32 +43,32 @@ function timeGenerator() {
 };
 
 // Moves count
-function movesCounter() {
-    moves++;
+const movesCounter = () => {
+    moves += 1;
     movesCount.innerHTML = `<span>Moves:</span>${moves}`;
-}
+};
 
 // Pick random items from the items array
-function selectRandomItems(size = 4) {
+const selectRandomItems = (size = 4) => {
     // Temporary array to store unselected items
     let temp = [...items];
-    let cards = [];
+    let cardNames = [];
     size = (size ** 2) / 2;
 
     // Select a random item then remove from temporary array
     for (i = 0; i < size; i++) {
         const randomIndex = Math.floor(Math.random() * temp.length);
-        cards.push(temp[randomIndex]);
+        cardNames.push(temp[randomIndex]);
         temp.splice(randomIndex, 1);
     }
-    return cards;
-}
+    return cardNames;
+};
 
 // Generate a puzzle grid
-function puzzleGenerator (cardNames, size = 4) {
+const puzzleGenerator = (cardNames, size = 4) => {
     // Generate two of each card then shuffle the order
     gameContainer.innerHTML = "";
-    cardNames = [...cards, ...cards];
+    cardNames = [...cardNames, ...cardNames];
     cardNames.sort(() => Math.random() - 0.5);
 
     // Create cards
@@ -96,25 +96,26 @@ function puzzleGenerator (cardNames, size = 4) {
                 if (!firstCard) {
                     firstCard = card;
                     firstCardValue = card.getAttribute("card-value");
-                }
-            } else {
-                movesCounter();
-                secondCard = card;
-                secondCardValue = card.getAttribute("card-value");
-                // Compare the values of first and second card
-                if (firstCardValue == secondCardValue) {
-                    // If the cards match, add a matched attribute to the card
-                    firstCard.classList.add("matched");
-                    secondCard.classList.add("matched");
-                    firstCard = false;
-                    // Increment win count
-                    // Check if it equals half the number of cards
-                    wins++;
-                    if (wins == Math.floor(cards.length / 2)) {
-                        result.innerHTML = 
-                        `<h3>Congratulations, you won!</h3>
-                        <h4> Moves: ${move}</h4>`;
-                        stopGame();
+                } else {
+                    // Increment moves
+                    movesCounter();
+                    secondCard = card;
+                    let secondCardValue = card.getAttribute("card-value");
+                    // Compare the values of first and second card
+                    if (firstCardValue == secondCardValue) {
+                        // If the cards match, add a matched attribute to the card
+                        firstCard.classList.add("matched");
+                        secondCard.classList.add("matched");
+                        firstCard = false;
+                        // Increment win count
+                        // Check if it equals half the number of cards
+                        wins += 1;
+                        if (wins == size ** 2 / 2) {
+                            result.innerHTML = 
+                            `<h3>Congratulations, you won!</h3>
+                            <h4> Moves: ${move}</h4>`;
+                            stopGame();
+                        } 
                     } else {
                         // If the cards don't match, flip both around
                         tempFirstCard = firstCard;
@@ -127,31 +128,32 @@ function puzzleGenerator (cardNames, size = 4) {
                         }, 900);
                     } 
                 }
-            }
+            } 
         })
     })
-}
+};
 
 // Initialise game
-function initialiseGame() {
+const initialiseGame = () => {
     result.innerText = "";
     wins = 0;
     cards = selectRandomItems();
     console.log(cards);
     puzzleGenerator(cards);
-}
+};
 
 // Start game
 startButton.addEventListener("click", () => {
     // Initialise move count and time
     moves = 0;
-    time = 0;
+    seconds = 0;
+    minutes = 0;
     // Hide start button and its container
     controlsContainer.classList.add("hide");
     endButton.classList.remove("hide");
     startButton.classList.add("hide");
     // Start timer
-    interval = setInterval(timeGenerator(), 1000);
+    interval = setInterval(timeGenerator, 1000);
     movesCount.innerHTML = `<span>Moves: </span>${moves}`;
     initialiseGame();
 })

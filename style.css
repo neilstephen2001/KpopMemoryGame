@@ -7,29 +7,25 @@
 }
 
 body {
-    /*display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;*/
     background-color: #fff8e7;
 }
 .wrapper {
     box-sizing: content-box;
-    width: 26.87em;
-    padding: 2.5em 3em;
     background: #f8f8f8;
     position: absolute;
-    transform: translate(-50%, -50%);
+    width: 26.87em;
+    padding: 2.5em 3em;
     left: 50%;
     top: 50%;
+    transform: translate(-50%, -50%);
     border-radius: 0.6em;
     border: 3px solid #000000;
     box-shadow: 0 0.9em 2.8em rgba(0, 0, 0, 0.15);  
 }
 #game {
+    display: grid;
     position: relative;
     width: 100%;
-    display: grid;
     gap: 0.6em;
 }
 .stats {
@@ -69,10 +65,10 @@ body {
     max-width: 90%;
     border-radius: 4.5px;
 }
-.card.flipped.front {
+.card.flipped .front {
     transform: rotateY(180deg);
 }
-.card.flipped.back {
+.card.flipped .back {
     transform: rotateY(0deg);
 }
 .controls {
