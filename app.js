@@ -163,7 +163,7 @@ const puzzleGenerator = (cardNames, size, artist) => {
         card.addEventListener("click", () => {
             // Flip a clicked card if it is unmatched
             // Set card to the first/second selected card and store its value
-            if (!card.classList.contains("matched")) {
+            if (!card.classList.contains("matched") && !card.classList.contains("flipped")) {
                 card.classList.add("flipped");
                 if (!firstCard) {
                     firstCard = card;
