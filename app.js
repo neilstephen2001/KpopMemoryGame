@@ -163,12 +163,12 @@ const puzzleGenerator = (cardNames, size, artist) => {
         card.addEventListener("click", () => {
             // Flip a clicked card if it is unmatched
             // Set card to the first/second selected card and store its value
-            if (!card.classList.contains("matched") && !card.classList.contains("flipped")) {
+            if (!card.classList.contains("matched") && !card.classList.contains("flipped") && (!firstCard || !secondCard)) {
                 card.classList.add("flipped");
                 if (!firstCard) {
                     firstCard = card;
                     firstCardValue = card.getAttribute("card-value");
-                } else {
+                } else if (!secondCard) {
                     // Increment moves
                     movesCounter();
                     secondCard = card;
@@ -179,6 +179,7 @@ const puzzleGenerator = (cardNames, size, artist) => {
                         firstCard.classList.add("matched");
                         secondCard.classList.add("matched");
                         firstCard = false;
+                        secondCard = false;
                         // Increment win count
                         // Check if it equals half the number of cards
                         wins++;
@@ -199,11 +200,11 @@ const puzzleGenerator = (cardNames, size, artist) => {
                         // If the cards don't match, flip both around
                         tempFirstCard = firstCard;
                         tempSecondCard = secondCard;
-                        firstCard = false;
-                        secondCard = false;
                         let delay = setTimeout(() => {
                             tempFirstCard.classList.remove("flipped");
                             tempSecondCard.classList.remove("flipped");
+                            firstCard = false;
+                            secondCard = false;
                         }, 900);
                     } 
                 }
