@@ -56,7 +56,6 @@ const nct_items = [
     {name: "jaehyun",   image:"nct/jaehyun.jpg"},
     {name: "winwin",    image:"nct/winwin.jpg"},
     {name: "jungwoo",   image:"nct/jungwoo.jpeg"},
-    {name: "lucas",     image:"nct/lucas.png"},
     {name: "mark",      image:"nct/mark.jpg"},
     {name: "xiaojun",   image:"nct/xiaojun.jpg"},
     {name: "hendery",   image:"nct/hendery.jpg"},
@@ -205,7 +204,7 @@ const puzzleGenerator = (cardNames, size, artist) => {
                             tempSecondCard.classList.remove("flipped");
                             firstCard = false;
                             secondCard = false;
-                        }, 900);
+                        }, 750);
                     } 
                 }
             } 
