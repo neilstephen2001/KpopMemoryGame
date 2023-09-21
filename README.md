@@ -30,7 +30,7 @@ The game ends either when all of the cards have been matched, or when the player
 <br>
 
 ## To run
-- The game is currently deployed at https://https://ns2001-kpop-memory.netlify.app/ 
+- The game is currently deployed at https://ns2001-kpop-memory.netlify.app/ 
 - However, the images will load faster if you download the code and run from your machine.
 
 ## To-do
