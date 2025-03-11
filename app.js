@@ -18,58 +18,36 @@ let items;
 let artist;
 let size;
 
+const exoImages = [
+    "suho.jpg", "xiumin.jpg", "lay.jpg", "baekhyun.jpg", "chen.jpg", "chanyeol.jpg", "do.jpg", "kai.jpg", "sehun.jpg"
+];
+
+const svtImages = [
+    "scoups.jpg", "jeonghan.png", "joshua.jpg", "jun.jpg", "wonwoo.jpg", "hoshi.jpg", "woozi.jpg",
+    "mingyu.jpg", "dk.jpeg", "the8.jpg", "seungkwan.jpg", "vernon.jpg", "dino.jpg"
+];
+
+const nctImages = [
+    "johnny.jpg", "taeyong.jpg", "yuta.jpg", "kun.jpg", "doyoung.jpg", "ten.jpg",
+    "jaehyun.jpg", "winwin.jpg", "jungwoo.jpeg", "mark.jpg", "xiaojun.jpg", "hendery.jpg",
+    "renjun.jpg", "jeno.jpg", "haechan.jpg", "jaemin.jpg", "yangyang.jpg", "chenle.jpeg", "jisung.jpg"
+];
+
 // Items array
-const exo_items = [
-    {name: "suho",      image:"exo/suho.jpg"},
-    {name: "xiumin",    image:"exo/xiumin.jpg"},
-    {name: "lay",       image:"exo/lay.jpg"},
-    {name: "baekhyun",  image:"exo/baekhyun.jpg"},
-    {name: "chen",      image:"exo/chen.jpg"},
-    {name: "chanyeol",  image:"exo/chanyeol.jpg"},
-    {name: "d.o.",      image:"exo/do.jpg"},
-    {name: "kai",       image:"exo/kai.jpg"},
-    {name: "sehun",     image:"exo/sehun.jpg"}
-];
-const svt_items = [
-    {name: "s.coups",   image:"svt/scoups.jpg"},
-    {name: "jeonghan",  image:"svt/jeonghan.png"},
-    {name: "joshua",    image:"svt/joshua.jpg"},
-    {name: "jun",       image:"svt/jun.jpg"},
-    {name: "wonwoo",    image:"svt/wonwoo.jpg"},
-    {name: "hoshi",     image:"svt/hoshi.jpg"},
-    {name: "woozi",     image:"svt/woozi.jpg"},
-    {name: "mingyu",    image:"svt/mingyu.jpg"},
-    {name: "d.k.",      image:"svt/dk.jpeg"},
-    {name: "the8",      image:"svt/the8.jpg"},
-    {name: "seungkwan", image:"svt/seungkwan.jpg"},
-    {name: "vernon",    image:"svt/vernon.jpg"},
-    {name: "dino",      image:"svt/dino.jpg"}
-]
-const nct_items = [
-    {name: "johnny",    image:"nct/johnny.jpg"},
-    {name: "taeyong",   image:"nct/taeyong.jpg"},
-    {name: "yuta",      image:"nct/yuta.jpg"},
-    {name: "kun",       image:"nct/kun.jpg"},
-    {name: "doyoung",   image:"nct/doyoung.jpg"},
-    {name: "ten",       image:"nct/ten.jpg"},
-    {name: "jaehyun",   image:"nct/jaehyun.jpg"},
-    {name: "winwin",    image:"nct/winwin.jpg"},
-    {name: "jungwoo",   image:"nct/jungwoo.jpeg"},
-    {name: "mark",      image:"nct/mark.jpg"},
-    {name: "xiaojun",   image:"nct/xiaojun.jpg"},
-    {name: "hendery",   image:"nct/hendery.jpg"},
-    {name: "renjun",    image:"nct/renjun.jpg"},
-    {name: "jeno",      image:"nct/jeno.jpg"},
-    {name: "haechan",   image:"nct/haechan.jpg"},
-    {name: "jaemin",    image:"nct/jaemin.jpg"},
-    {name: "yangyang",  image:"nct/yangyang.jpg"},
-    {name: "chenle",    image:"nct/chenle.jpeg"},
-    {name: "jisung",    image:"nct/jisung.jpg"}
-];
+const exoItems = getItems("exo/", exoImages);
+const svtItems = getItems("svt/", svtImages);
+const nctItems = getItems("nct/", nctImages);
 
 // Initial stats
 let seconds = 0, minutes = 0;
 let moves = 0, wins = 0;
+
+const getItems = (folder, filenames) => {
+    return filenames.map(file => ({
+        name: file.split(".")[0],  
+        image: folder + file
+    }));
+}
 
 // Timer
 const timeGenerator = () => {
@@ -121,14 +99,14 @@ const puzzleGenerator = (cardNames, size, artist) => {
     // Back side contains photo of member
     for (i = 0; i < size ** 2; i++) {
         if (artist == "exo") {
-            gameContainer.innerHTML += 
-            `<div class="card" artist="exo" card-value="${cardNames[i].name}">
+            gameContainer.innerHTML +=
+                `<div class="card" artist="exo" card-value="${cardNames[i].name}">
                 <div class="front"><img src="exo/exo_logo2.jpeg" class="image"></div>
                 <div class="back"><img src="${cardNames[i].image}" class="image"></div>
             </div>`;
         } else if (artist == "nct") {
-            gameContainer.innerHTML += 
-            `<div class="card" artist="nct" card-value="${cardNames[i].name}">
+            gameContainer.innerHTML +=
+                `<div class="card" artist="nct" card-value="${cardNames[i].name}">
                 <div class="front"><img src="nct/nct_logo.jpg" class="image"></div>
                 <div class="back"><img src="${cardNames[i].image}" class="image"></div>
             </div>`
@@ -136,13 +114,13 @@ const puzzleGenerator = (cardNames, size, artist) => {
             console.log(i)
             // bottom right is a free spot since there is an odd number of cards
             if (i == 24) {
-                gameContainer.innerHTML += 
-                `<div class="blank">
+                gameContainer.innerHTML +=
+                    `<div class="blank">
                     <div class="free"><img src="svt/svt_icon.webp" class="image"></div>
                 </div>`
             } else {
-                gameContainer.innerHTML += 
-                `<div class="card" artist="svt" card-value="${cardNames[i].name}">
+                gameContainer.innerHTML +=
+                    `<div class="card" artist="svt" card-value="${cardNames[i].name}">
                     <div class="front"><img src="svt/svt_icon2.png" class="image"></div>
                     <div class="back"><img src="${cardNames[i].image}" class="image"></div>
                 </div>`
@@ -182,16 +160,17 @@ const puzzleGenerator = (cardNames, size, artist) => {
                         if (wins == Math.floor(cards.length / 2)) {
                             let secondsElapsed = seconds < 10 ? `0${seconds}` : seconds;
                             let minutesElapsed = minutes < 10 ? `0${minutes}` : minutes;
-                            setTimeout(() => {result.innerHTML = 
-                            `<h3>Well done!</h3>
+                            setTimeout(() => {
+                                result.innerHTML =
+                                    `<h3>Well done!</h3>
                             <h4> Group: ${artist.toUpperCase()}</h4>
                             <h4> Moves: ${moves}</h4>
                             <h4>Time: ${minutesElapsed}:${secondsElapsed}</h4>
                             <h5>Choose a group:</h5>`;
-                            stopGame();
-                            welcome.classList.add("hide");
+                                stopGame();
+                                welcome.classList.add("hide");
                             }, 1000);
-                        } 
+                        }
                     } else {
                         // If the cards don't match, flip both around
                         tempFirstCard = firstCard;
@@ -202,9 +181,9 @@ const puzzleGenerator = (cardNames, size, artist) => {
                             firstCard = false;
                             secondCard = false;
                         }, 750);
-                    } 
+                    }
                 }
-            } 
+            }
         })
     })
 };
