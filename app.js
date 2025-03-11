@@ -46,7 +46,6 @@ const svt_items = [
     {name: "dino",      image:"svt/dino.jpg"}
 ]
 const nct_items = [
-    {name: "taeil",     image:"nct/taeil.jpg"},
     {name: "johnny",    image:"nct/johnny.jpg"},
     {name: "taeyong",   image:"nct/taeyong.jpg"},
     {name: "yuta",      image:"nct/yuta.jpg"},
@@ -64,8 +63,6 @@ const nct_items = [
     {name: "haechan",   image:"nct/haechan.jpg"},
     {name: "jaemin",    image:"nct/jaemin.jpg"},
     {name: "yangyang",  image:"nct/yangyang.jpg"},
-    {name: "shotaro",   image:"nct/shotaro.jpg"},
-    {name: "sungchan",  image:"nct/sungchan.jpg"},
     {name: "chenle",    image:"nct/chenle.jpeg"},
     {name: "jisung",    image:"nct/jisung.jpg"}
 ];
