@@ -7,7 +7,11 @@ const result = document.getElementById("result");
 const artistName = document.getElementById("name");
 const controlsContainer = document.querySelector(".controls");
 
-const artistButtons = [document.getElementById("exo"), document.getElementById("svt"), document.getElementById("nct")];
+const artistButtons = [
+    document.getElementById("exo"),
+    document.getElementById("svt"),
+    document.getElementById("nct")
+];
 
 let cards;
 let interval;
@@ -45,7 +49,7 @@ const getItems = (folder, filenames) => {
 // Game configuration
 const gameConfig = {
     exo: { items: getItems("exo/", exoImages), size: 4, name: "EXO", logo: "exo/exo_logo2.jpeg" },
-    svt: { items: getItems("svt/", svtImages), size: 5, name: "SEVENTEEN", logo: "svt/svt_icon2.png" },
+    svt: { items: getItems("svt/", svtImages), size: 5, name: "SEVENTEEN", logo: "svt/svt_icon2.png", freeLogo: "svt/svt_icon.webp" },
     nct: { items: getItems("nct/", nctImages), size: 6, name: "NCT", logo: "nct/nct_logo.jpg" }
 };
 
@@ -57,13 +61,13 @@ const getTimeDisplay = (totalSeconds) => {
 
 // Timer
 const timeGenerator = () => {
-    [secondsElapsed, minutesElapsed] = getTimeDisplay(totalSeconds++);
+    [secondsElapsed, minutesElapsed] = getTimeDisplay(++totalSeconds);
     timeElapsed.innerHTML = `<span>Time: </span>${minutesElapsed}:${secondsElapsed}`;
 };
 
 // Moves count
 const movesCounter = () => {
-    movesCount.innerHTML = `<span>Moves: </span>${moves++}`;
+    movesCount.innerHTML = `<span>Moves: </span>${++moves}`;
 };
 
 // Pick random items from the items array
@@ -89,38 +93,28 @@ const puzzleGenerator = (cardNames, size, artist) => {
     cardNames = [...cardNames, ...cardNames];
     cardNames.sort(() => Math.random() - 0.5);
 
-    // Create cards
-    // Front side contains logo
-    // Back side contains photo of member
-    for (let i = 0; i < size ** 2; i++) {
-        if (artist === "exo") {
-            gameContainer.innerHTML +=
-                `<div class="card" artist="exo" card-value="${cardNames[i].name}">
-                <div class="front"><img src="exo/exo_logo2.jpeg" alt="exo-logo" class="image"></div>
-                <div class="back"><img src="${cardNames[i].image}" alt="${cardNames[i].name}" class="image"></div>
-            </div>`;
-        } else if (artist === "nct") {
-            gameContainer.innerHTML +=
-                `<div class="card" artist="nct" card-value="${cardNames[i].name}">
-                <div class="front"><img src="nct/nct_logo.jpg" alt="nct-logo" class="image"></div>
-                <div class="back"><img src="${cardNames[i].image}" alt="${cardNames[i].name}" class="image"></div>
-            </div>`
-        } else {
-            // bottom right is a free spot since there is an odd number of cards
-            if (i === 24) {
-                gameContainer.innerHTML +=
-                    `<div class="blank">
-                    <div class="free"><img src="svt/svt_icon.webp" class="image"></div>
-                </div>`
-            } else {
-                gameContainer.innerHTML +=
-                    `<div class="card" artist="svt" card-value="${cardNames[i].name}">
-                    <div class="front"><img src="svt/svt_icon2.png" alt="svt-logo" class="image"></div>
-                    <div class="back"><img src="${cardNames[i].image}" alt="${cardNames[i].name}" class="image"></div>
-                </div>`
-            }
-        }
+    if (size % 2 === 1) {
+        cardNames.splice(size ** 2 / 2, 0, { name: "", image: "" });
     }
+
+    // Create cards: front side contains logo, back side contains photo of member
+    gameContainer.innerHTML = cardNames
+        .slice(0, size ** 2)
+        .map((card, i) => {
+            // Handle the "free spot" case if there are an odd number of cards
+            return card.name === "" ? `
+                <div class="blank">
+                    <div class="free"><img src="${gameConfig[artist].freeLogo}" alt="${artist}-logo" class="image"></div>
+                </div>
+            ` : `
+                <div class="card" artist="${artist}" card-value="${card.name}">
+                    <div class="front"><img src="${gameConfig[artist].logo}" alt="${artist}-logo" class="image"></div>
+                    <div class="back"><img src="${card.image}" alt="${card.name}" class="image"></div>
+                </div>
+            `;
+        })
+        .join("");
+
     // Generate grid
     gameContainer.style.gridTemplateRows = `repeat(${size}, auto)`;
     gameContainer.style.gridTemplateColumns = `repeat(${size}, auto)`;
@@ -186,7 +180,6 @@ const initialiseGame = () => {
     // Initialise move count and time
     moves = 0;
     totalSeconds = 0;
-
     movesCount.innerHTML = `<span>Moves: </span>${moves}`;
     timeElapsed.innerHTML = `<span>Time: </span>00:00`;
 
