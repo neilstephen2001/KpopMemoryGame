@@ -1,14 +1,13 @@
 const movesCount = document.getElementById("moves");
 const timeElapsed = document.getElementById("time");
-const exoButton = document.getElementById("exo");
-const svtButton = document.getElementById("svt");
-const nctButton = document.getElementById("nct");
 const endButton = document.getElementById("end");
 const gameContainer = document.getElementById("game");
 const welcome = document.getElementById("welcome");
 const result = document.getElementById("result");
 const artistName = document.getElementById("name");
 const controlsContainer = document.querySelector(".controls");
+
+const artistButtons = [document.getElementById("exo"), document.getElementById("svt"), document.getElementById("nct")];
 
 let cards;
 let interval;
@@ -33,14 +32,8 @@ const nctImages = [
     "renjun.jpg", "jeno.jpg", "haechan.jpg", "jaemin.jpg", "yangyang.jpg", "chenle.jpeg", "jisung.jpg"
 ];
 
-// Items array
-const exoItems = getItems("exo/", exoImages);
-const svtItems = getItems("svt/", svtImages);
-const nctItems = getItems("nct/", nctImages);
-
 // Initial stats
-let seconds = 0, minutes = 0;
-let moves = 0, wins = 0;
+var totalSeconds, moves, wins;
 
 const getItems = (folder, filenames) => {
     return filenames.map(file => ({
@@ -49,24 +42,28 @@ const getItems = (folder, filenames) => {
     }));
 }
 
+// Game configuration
+const gameConfig = {
+    exo: { items: getItems("exo/", exoImages), size: 4, name: "EXO", logo: "exo/exo_logo2.jpeg" },
+    svt: { items: getItems("svt/", svtImages), size: 5, name: "SEVENTEEN", logo: "svt/svt_icon2.png" },
+    nct: { items: getItems("nct/", nctImages), size: 6, name: "NCT", logo: "nct/nct_logo.jpg" }
+};
+
+const getTimeDisplay = (totalSeconds) => {
+    let seconds = Math.floor(totalSeconds % 60);
+    let minutes = Math.floor(totalSeconds / 60);
+    return [seconds.toString().padStart(2, '0'), minutes.toString().padStart(2, '0')];
+}
+
 // Timer
 const timeGenerator = () => {
-    seconds++;
-    if (seconds >= 60) {
-        minutes++;
-        seconds = 0;
-    }
-
-    // Formatting the time
-    let secondsElapsed = seconds < 10 ? `0${seconds}` : seconds;
-    let minutesElapsed = minutes < 10 ? `0${minutes}` : minutes;
+    [secondsElapsed, minutesElapsed] = getTimeDisplay(totalSeconds++);
     timeElapsed.innerHTML = `<span>Time: </span>${minutesElapsed}:${secondsElapsed}`;
 };
 
 // Moves count
 const movesCounter = () => {
-    moves++;
-    movesCount.innerHTML = `<span>Moves: </span>${moves}`;
+    movesCount.innerHTML = `<span>Moves: </span>${moves++}`;
 };
 
 // Pick random items from the items array
@@ -75,7 +72,6 @@ const selectRandomItems = (size) => {
     let temp = [...items];
     let cardNames = [];
     sizeTemp = Math.floor((size ** 2) / 2);
-    console.log(sizeTemp);
 
     // Select a random item then remove from temporary array
     for (i = 0; i < sizeTemp; i++) {
@@ -92,28 +88,26 @@ const puzzleGenerator = (cardNames, size, artist) => {
     gameContainer.innerHTML = "";
     cardNames = [...cardNames, ...cardNames];
     cardNames.sort(() => Math.random() - 0.5);
-    console.log(cardNames)
 
     // Create cards
     // Front side contains logo
     // Back side contains photo of member
-    for (i = 0; i < size ** 2; i++) {
-        if (artist == "exo") {
+    for (let i = 0; i < size ** 2; i++) {
+        if (artist === "exo") {
             gameContainer.innerHTML +=
                 `<div class="card" artist="exo" card-value="${cardNames[i].name}">
-                <div class="front"><img src="exo/exo_logo2.jpeg" class="image"></div>
-                <div class="back"><img src="${cardNames[i].image}" class="image"></div>
+                <div class="front"><img src="exo/exo_logo2.jpeg" alt="exo-logo" class="image"></div>
+                <div class="back"><img src="${cardNames[i].image}" alt="${cardNames[i].name}" class="image"></div>
             </div>`;
-        } else if (artist == "nct") {
+        } else if (artist === "nct") {
             gameContainer.innerHTML +=
                 `<div class="card" artist="nct" card-value="${cardNames[i].name}">
-                <div class="front"><img src="nct/nct_logo.jpg" class="image"></div>
-                <div class="back"><img src="${cardNames[i].image}" class="image"></div>
+                <div class="front"><img src="nct/nct_logo.jpg" alt="nct-logo" class="image"></div>
+                <div class="back"><img src="${cardNames[i].image}" alt="${cardNames[i].name}" class="image"></div>
             </div>`
         } else {
-            console.log(i)
             // bottom right is a free spot since there is an odd number of cards
-            if (i == 24) {
+            if (i === 24) {
                 gameContainer.innerHTML +=
                     `<div class="blank">
                     <div class="free"><img src="svt/svt_icon.webp" class="image"></div>
@@ -121,8 +115,8 @@ const puzzleGenerator = (cardNames, size, artist) => {
             } else {
                 gameContainer.innerHTML +=
                     `<div class="card" artist="svt" card-value="${cardNames[i].name}">
-                    <div class="front"><img src="svt/svt_icon2.png" class="image"></div>
-                    <div class="back"><img src="${cardNames[i].image}" class="image"></div>
+                    <div class="front"><img src="svt/svt_icon2.png" alt="svt-logo" class="image"></div>
+                    <div class="back"><img src="${cardNames[i].image}" alt="${cardNames[i].name}" class="image"></div>
                 </div>`
             }
         }
@@ -148,7 +142,7 @@ const puzzleGenerator = (cardNames, size, artist) => {
                     secondCard = card;
                     let secondCardValue = card.getAttribute("card-value");
                     // Compare the values of first and second card
-                    if (firstCardValue == secondCardValue) {
+                    if (firstCardValue === secondCardValue) {
                         // If the cards match, add a matched attribute to the card
                         firstCard.classList.add("matched");
                         secondCard.classList.add("matched");
@@ -157,9 +151,8 @@ const puzzleGenerator = (cardNames, size, artist) => {
                         // Increment win count
                         // Check if it equals half the number of cards
                         wins++;
-                        if (wins == Math.floor(cards.length / 2)) {
-                            let secondsElapsed = seconds < 10 ? `0${seconds}` : seconds;
-                            let minutesElapsed = minutes < 10 ? `0${minutes}` : minutes;
+                        if (wins === Math.floor(cards.length / 2)) {
+                            [secondsElapsed, minutesElapsed] = getTimeDisplay(totalSeconds);
                             setTimeout(() => {
                                 result.innerHTML =
                                     `<h3>Well done!</h3>
@@ -175,7 +168,7 @@ const puzzleGenerator = (cardNames, size, artist) => {
                         // If the cards don't match, flip both around
                         tempFirstCard = firstCard;
                         tempSecondCard = secondCard;
-                        let delay = setTimeout(() => {
+                        setTimeout(() => {
                             tempFirstCard.classList.remove("flipped");
                             tempSecondCard.classList.remove("flipped");
                             firstCard = false;
@@ -190,88 +183,49 @@ const puzzleGenerator = (cardNames, size, artist) => {
 
 // Initialise game
 const initialiseGame = () => {
+    // Initialise move count and time
+    moves = 0;
+    totalSeconds = 0;
+
+    movesCount.innerHTML = `<span>Moves: </span>${moves}`;
+    timeElapsed.innerHTML = `<span>Time: </span>00:00`;
+
+    // Hide start button and its container
+    controlsContainer.classList.add("hide");
+    endButton.classList.remove("hide");
+    artistButtons.forEach(button => button.classList.add("hide"));
+
+    // Initialise puzzle
     result.innerText = "";
     wins = 0;
     cards = selectRandomItems(size);
-    console.log(cards);
     puzzleGenerator(cards, size, artist);
+
+    // Start timer
+    interval = setInterval(timeGenerator, 1000);
 };
 
 // Start game
-exoButton.addEventListener("click", () => {
-    // Initialise move count and time
-    moves = 0;
-    seconds = 0;
-    minutes = 0;
-    // Initialise game parameters
-    items = exo_items;
-    artist = "exo";
-    size = 4;
-    artistName.innerHTML = `<span>EXO</span>`;
-    timeElapsed.innerHTML = `<span>Time: </span>00:00`;
-    // Hide start button and its container
-    controlsContainer.classList.add("hide");
-    endButton.classList.remove("hide");
-    exoButton.classList.add("hide");
-    nctButton.classList.add("hide");
-    // Start timer
-    interval = setInterval(timeGenerator, 1000);
-    movesCount.innerHTML = `<span>Moves: </span>${moves}`;
-    initialiseGame();
-})
+document.querySelectorAll(".buttons button").forEach(button => {
+    button.addEventListener("click", () => {
+        // Get the button ID (exo, svt, nct)
+        const key = button.id;
 
-svtButton.addEventListener("click", () => {
-    // Initialise move count and time
-    moves = 0;
-    seconds = 0;
-    minutes = 0;
-    // Initialise game parameters
-    items = svt_items;
-    artist = "svt";
-    size = 5;
-    artistName.innerHTML = `<span>SEVENTEEN</span>`;
-    timeElapsed.innerHTML = `<span>Time: </span>00:00`;
-    // Hide start button and its container
-    controlsContainer.classList.add("hide");
-    endButton.classList.remove("hide");
-    exoButton.classList.add("hide");
-    nctButton.classList.add("hide");
-    // Start timer
-    interval = setInterval(timeGenerator, 1000);
-    movesCount.innerHTML = `<span>Moves: </span>${moves}`;
-    initialiseGame();
-})
-
-nctButton.addEventListener("click", () => {
-    // Initialise move count and time
-    moves = 0;
-    seconds = 0;
-    minutes = 0;
-    // Initialise game parameters
-    items = nct_items;
-    artist = "nct";
-    size = 6;
-    artistName.innerHTML = `<span>NCT</span>`;
-    timeElapsed.innerHTML = `<span>Time: </span>00:00`;
-    // Hide start button and its container
-    controlsContainer.classList.add("hide");
-    endButton.classList.remove("hide");
-    exoButton.classList.add("hide");
-    nctButton.classList.add("hide");
-    // Start timer
-    interval = setInterval(timeGenerator, 1000);
-    movesCount.innerHTML = `<span>Moves: </span>${moves}`;
-    initialiseGame();
-})
+        if (gameConfig[key]) {
+            // Set game parameters dynamically
+            ({ items, size } = gameConfig[key]);
+            artist = key;
+            artistName.innerHTML = `<span>${gameConfig[key].name}</span>`;
+            initialiseGame();
+        }
+    });
+});
 
 // End game
 endButton.addEventListener("click", stopGame = () => {
     controlsContainer.classList.remove("hide");
     welcome.classList.remove("hide");
     endButton.classList.add("hide");
-    exoButton.classList.remove("hide");
-    nctButton.classList.remove("hide");
+    artistButtons.forEach(button => button.classList.remove("hide"));
     clearInterval(interval);
 })
-
-//
