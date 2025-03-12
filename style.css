@@ -12,6 +12,23 @@ body {
     height: 100vh;
     width: 100vw;
 }
+h2 {
+    font-size: 2.5em;
+    font-weight: 600;
+}
+h3 {
+    font-size: 1.8em;
+    font-weight: 500;
+}
+span {
+    font-weight: 600;
+}
+button {
+    border-radius: 0.3em;
+    padding: 1em 1.5em;
+    cursor: pointer;
+}
+
 .wrapper {
     box-sizing: content-box;
     background: #eeeeee;
@@ -26,51 +43,39 @@ body {
     box-shadow: 0 0.9em 2.8em rgba(0, 0, 0, 0.15);
     display: none;
 }
+.wrapper button {
+    font-size: 1.2em;
+    display: block;
+    margin: 1.1em auto 0 auto;
+    border: 2px solid #000000;
+    background-color: #ffffff;
+}
+
 #game {
     display: grid;
     position: relative;
-    width: 100%;
-    height: 100%;
     gap: 0.6em;
 }
+
 .heading {
     display: flex;
     justify-content: space-between;
-    color: #000000;
-}
-#name span {
-    text-align: left;
-    justify-content: center;
     margin-bottom: 1.2em;
-    font-size: 2.5em;
-    font-weight: 600;
 }
+
 .stats {
     text-align: right;
-    margin-bottom: 1.2em;
     font-size: 1.2em;
 }
-.stats span {
-    font-weight: 600;
-}
+
 .card, .blank {
     position: relative;
+    aspect-ratio: 1 / 1;
 }
 .card {
     cursor: pointer;
 }
-.card[artist="exo"] {
-    width: 7.05em;
-    height: 7.05em;
-}
-.card[artist="nct"] {
-    width: 4.5em;
-    height: 4.5em;
-}
-.card[artist="svt"], .blank {
-    width: 5.52em;
-    height: 5.52em;
-}
+
 .front, .back, .free {
     position: absolute;
     width: 100%;
@@ -78,7 +83,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2.5px solid #000000;
+    border: 2px solid #000000;
     border-radius: 5px;
     transition: transform 0.7s ease-out;
     background-color: #ffffff;
@@ -87,96 +92,55 @@ body {
 .back {
     transform: rotateY(180deg);
 }
-.front img {
+.front img, .free img {
     max-width: 75%;
-    border-radius: 5px;
-}
-.card[artist="nct"] .front img{
-    opacity: 0.8;
 }
 .back img {
     max-width: 90%;
-    border-radius: 4.5px;
+    border-radius: 3px;
 }
-.free img {
-    max-width: 75%;
-    border-radius: 5px;
-}
+
 .card.flipped .front {
     transform: rotateY(180deg);
 }
 .card.flipped .back {
     transform: rotateY(0deg);
 }
+
 .controls {
-    position: absolute;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     flex-direction: column;
+    gap: 1em;
     width: 100%;
     height: 100%;
-    background-color: #fff8e7;
     overflow: hidden;
+}
+.controls .select-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
 }
 .controls .buttons {
     display: flex;
-    flex-direction: row;
+    gap: 1em;
     justify-content: center;
-    margin: 0.25em 0 0 0;
-}
-button {
-    border: none;
-    border-radius: 0.3em;
-    padding: 1em 1.5em;
-    cursor: pointer;
-}
-.wrapper button {
-    font-size: 1.2em;
-    display: block;
-    margin: 1.1em auto 0 auto;
-    color: #000000;
-    border: 2px solid #000000;
-    background-color: #ffffff;
-    font-weight: 600;
 }
 .controls button {
-    color: #000000;
     background-color: #ffffff;
     display: inline-block;
     font-size: 1.2em;
     font-weight: 500;
     box-shadow: 0 0.6em 2em rgba(86,66,0,0.2);
     border: 3px solid #000000;
-    margin: 0.5em 0.5em 0.5em 0.5em;
     position: relative;
-    top: -100px;
 }
 .controls button span {
     font-size: 1.8em;
-    font-weight: 600;
 }
+
 .hide {
     display: none;
 }
-#result, #welcome {
-    text-align: center;
-    position: relative;
-    top: -100px;
-}
-.controls h3 {
-    font-size: 2.5em;
-    font-weight: 600;
-    margin: 0 0 0.1em 0;
-}
-.controls h4 {
-    font-size: 1.8em;
-    font-weight: 500;
-}
-.controls h5 {
-    font-size: 1.8em;
-    font-weight: 500;
-    margin: 0.75em 0 0 0;
-}
-/**/

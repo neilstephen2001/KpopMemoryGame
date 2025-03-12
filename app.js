@@ -181,7 +181,7 @@ const initialiseGame = (size, artist) => {
     moves = matches = totalSeconds = 0;
     movesCount.innerHTML = `<span>Moves: </span>0`;
     timeElapsed.innerHTML = `<span>Time: </span>00:00`;
-    result.innerText = "";
+    result.innerHTML = "";
 
     // Toggle visibility of UI elements
     controlsContainer.style.display = "none";
@@ -201,7 +201,7 @@ const configureGame = (artist) => {
     const config = gameConfig[artist];
     if (config) {
         items = config.items;
-        artistName.innerHTML = `<span>${config.name}</span>`;
+        artistName.innerHTML = `<h2>${config.name}</h2>`;
         initialiseGame(config.size, artist);
     }
 }
@@ -227,11 +227,10 @@ const winGame = (artist) => {
     [secondsElapsed, minutesElapsed] = getTimeDisplay(totalSeconds);
     setTimeout(() => {
         result.innerHTML = `
-                                <h3>Well done!</h3>
-                                <h4>Group: ${artist.toUpperCase()}</h4>
-                                <h4>Moves: ${moves}</h4>
-                                <h4>Time: ${minutesElapsed}:${secondsElapsed}</h4>
-                                <h5>Select a group:</h5>`;
+            <h2>Well done!</h2>
+            <h3>Group: ${artist.toUpperCase()}</h3>
+            <h3>Moves: ${moves}</h3>
+            <h3>Time: ${minutesElapsed}:${secondsElapsed}</h3>`
         endGame();
         welcome.classList.add("hide");
     }, 750);
