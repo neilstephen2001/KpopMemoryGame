@@ -37,65 +37,87 @@ const nctImages = [
 ];
 
 // Initial stats
-var totalSeconds, moves, wins;
+let totalSeconds, moves, matches;
 
-const getItems = (folder, filenames) => {
-    return filenames.map(file => ({
+/**
+ * Get all the items to use for the game.
+ * @param folder The folder containing the images.
+ * @param fileNames The names of the image files to use.
+ * @returns {*}
+ */
+const getItems = (folder, fileNames) => {
+    return fileNames.map(file => ({
         name: file.split(".")[0],  
         image: folder + file
     }));
 }
 
-// Game configuration
+/**
+ * Game configuration.
+ */
 const gameConfig = {
-    exo: { items: getItems("exo/", exoImages), size: 4, name: "EXO", logo: "exo/exo_logo2.jpeg" },
+    exo: { items: getItems("exo/", exoImages), size: 4, name: "EXO", logo: "exo/exo_logo2.jpeg", freeLogo: undefined },
     svt: { items: getItems("svt/", svtImages), size: 5, name: "SEVENTEEN", logo: "svt/svt_icon2.png", freeLogo: "svt/svt_icon.webp" },
-    nct: { items: getItems("nct/", nctImages), size: 6, name: "NCT", logo: "nct/nct_logo.jpg" }
+    nct: { items: getItems("nct/", nctImages), size: 6, name: "NCT", logo: "nct/nct_logo.jpg", freeLogo: undefined }
 };
 
+/**
+ * Get a readable version of the time elapsed.
+ * @param totalSeconds
+ * @returns {[string,string]}
+ */
 const getTimeDisplay = (totalSeconds) => {
     let seconds = Math.floor(totalSeconds % 60);
     let minutes = Math.floor(totalSeconds / 60);
     return [seconds.toString().padStart(2, '0'), minutes.toString().padStart(2, '0')];
 }
 
-// Timer
+/**
+ * Increment the time elapsed.
+ */
 const timeGenerator = () => {
     [secondsElapsed, minutesElapsed] = getTimeDisplay(++totalSeconds);
     timeElapsed.innerHTML = `<span>Time: </span>${minutesElapsed}:${secondsElapsed}`;
 };
 
-// Moves count
+/**
+ * Increment the move count.
+ */
 const movesCounter = () => {
     movesCount.innerHTML = `<span>Moves: </span>${++moves}`;
 };
 
-// Pick random items from the items array
-const selectRandomItems = (size) => {
-    // Temporary array to store unselected items
-    let temp = [...items];
-    let cardNames = [];
-    sizeTemp = Math.floor((size ** 2) / 2);
+/**
+ * Get a random list of cards to use for the game.
+ * @param size The size of the grid.
+ * @returns {*[]}
+ */
+const getCards = (size) => {
+    const itemsArray = [...items];
+    const numberOfItems = Math.floor((size ** 2) / 2);
 
-    // Select a random item then remove from temporary array
-    for (i = 0; i < sizeTemp; i++) {
-        const randomIndex = Math.floor(Math.random() * temp.length);
-        cardNames.push(temp[randomIndex]);
-        temp.splice(randomIndex, 1);
-    }
-    return cardNames;
-};
+    // Select a random item then duplicate
+    const cards = Array.from({ length: numberOfItems }, () =>
+        itemsArray.splice(Math.floor(Math.random() * itemsArray.length), 1)[0]
+    ).flatMap(card => [card, card]);
 
-// Generate a puzzle grid
-const puzzleGenerator = (cardNames, size, artist) => {
-    // Generate two of each card then shuffle the order
-    gameContainer.innerHTML = "";
-    cardNames = [...cardNames, ...cardNames];
-    cardNames.sort(() => Math.random() - 0.5);
+    // Shuffle the card order, and add the free space if required
+    cards.sort(() => Math.random() - 0.5);
 
     if (size % 2 === 1) {
-        cardNames.splice(size ** 2 / 2, 0, { name: "", image: "" });
+        cards.splice(size ** 2 / 2, 0, { name: "", image: "" });
     }
+
+    return cards;
+}
+
+/**
+ * Generate puzzle grid.
+ * @param size The size of the grid.
+ * @param artist The key for the artist.
+ */
+const puzzleGenerator = (size, artist) => {
+    const cardNames = getCards(size);
 
     // Create cards: front side contains logo, back side contains photo of member
     gameContainer.innerHTML = cardNames
@@ -144,17 +166,17 @@ const puzzleGenerator = (cardNames, size, artist) => {
                         secondCard = false;
                         // Increment win count
                         // Check if it equals half the number of cards
-                        wins++;
-                        if (wins === Math.floor(cards.length / 2)) {
+                        matches++;
+                        if (matches === Math.floor(cards.length / 2)) {
                             [secondsElapsed, minutesElapsed] = getTimeDisplay(totalSeconds);
                             setTimeout(() => {
-                                result.innerHTML =
-                                    `<h3>Well done!</h3>
-                            <h4> Group: ${artist.toUpperCase()}</h4>
-                            <h4> Moves: ${moves}</h4>
-                            <h4>Time: ${minutesElapsed}:${secondsElapsed}</h4>
-                            <h5>Choose a group:</h5>`;
-                                stopGame();
+                                result.innerHTML = `
+                                    <h3>Well done!</h3>
+                                    <h4> Group: ${artist.toUpperCase()}</h4>
+                                    <h4> Moves: ${moves}</h4>
+                                    <h4>Time: ${minutesElapsed}:${secondsElapsed}</h4>
+                                    <h5>Choose a group:</h5>`;
+                                endGame();
                                 welcome.classList.add("hide");
                             }, 1000);
                         }
@@ -171,54 +193,47 @@ const puzzleGenerator = (cardNames, size, artist) => {
                     }
                 }
             }
-        })
-    })
+        });
+    });
 };
 
-// Initialise game
+/**
+ * Initialise the game.
+ */
 const initialiseGame = () => {
-    // Initialise move count and time
-    moves = 0;
-    totalSeconds = 0;
-    movesCount.innerHTML = `<span>Moves: </span>${moves}`;
+    // Reset move count, matches and time
+    moves = matches = totalSeconds = 0;
+    movesCount.innerHTML = `<span>Moves: </span>0`;
     timeElapsed.innerHTML = `<span>Time: </span>00:00`;
+    result.innerText = "";
 
-    // Hide start button and its container
+    // Toggle visibility of UI elements
     controlsContainer.classList.add("hide");
     endButton.classList.remove("hide");
     artistButtons.forEach(button => button.classList.add("hide"));
 
-    // Initialise puzzle
-    result.innerText = "";
-    wins = 0;
-    cards = selectRandomItems(size);
-    puzzleGenerator(cards, size, artist);
-
-    // Start timer
+    // Generate puzzle and start timer
+    puzzleGenerator(size, artist);
     interval = setInterval(timeGenerator, 1000);
 };
 
-// Start game
+// Set game parameters based on the button ID (artist name) and start the game
 document.querySelectorAll(".buttons button").forEach(button => {
     button.addEventListener("click", () => {
-        // Get the button ID (exo, svt, nct)
-        const key = button.id;
-
-        if (gameConfig[key]) {
-            // Set game parameters dynamically
-            ({ items, size } = gameConfig[key]);
-            artist = key;
-            artistName.innerHTML = `<span>${gameConfig[key].name}</span>`;
+        if (gameConfig[button.id]) {
+            artist = button.id;
+            ({ items, size } = gameConfig[artist]);
+            artistName.innerHTML = `<span>${gameConfig[artist].name}</span>`;
             initialiseGame();
         }
     });
 });
 
-// End game
-endButton.addEventListener("click", stopGame = () => {
+// End the game.
+endButton.addEventListener("click", endGame = () => {
     controlsContainer.classList.remove("hide");
     welcome.classList.remove("hide");
     endButton.classList.add("hide");
     artistButtons.forEach(button => button.classList.remove("hide"));
     clearInterval(interval);
-})
+});
