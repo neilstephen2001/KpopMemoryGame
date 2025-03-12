@@ -13,30 +13,12 @@ const artistButtons = [
     document.getElementById("nct")
 ];
 
-let cards;
-let interval;
-let firstCard = false;
-let secondCard = false;
-let items;
-let artist;
-let size;
+const exoImages = ["suho.jpg", "xiumin.jpg", "lay.jpg", "baekhyun.jpg", "chen.jpg", "chanyeol.jpg", "do.jpg", "kai.jpg", "sehun.jpg"];
+const svtImages = ["scoups.jpg", "jeonghan.png", "joshua.jpg", "jun.jpg", "wonwoo.jpg", "hoshi.jpg", "woozi.jpg", "mingyu.jpg", "dk.jpeg", "the8.jpg", "seungkwan.jpg", "vernon.jpg", "dino.jpg"];
+const nctImages = ["johnny.jpg", "taeyong.jpg", "yuta.jpg", "kun.jpg", "doyoung.jpg", "ten.jpg", "jaehyun.jpg", "winwin.jpg", "jungwoo.jpeg", "mark.jpg", "xiaojun.jpg", "hendery.jpg", "renjun.jpg", "jeno.jpg", "haechan.jpg", "jaemin.jpg", "yangyang.jpg", "chenle.jpeg", "jisung.jpg"];
 
-const exoImages = [
-    "suho.jpg", "xiumin.jpg", "lay.jpg", "baekhyun.jpg", "chen.jpg", "chanyeol.jpg", "do.jpg", "kai.jpg", "sehun.jpg"
-];
-
-const svtImages = [
-    "scoups.jpg", "jeonghan.png", "joshua.jpg", "jun.jpg", "wonwoo.jpg", "hoshi.jpg", "woozi.jpg",
-    "mingyu.jpg", "dk.jpeg", "the8.jpg", "seungkwan.jpg", "vernon.jpg", "dino.jpg"
-];
-
-const nctImages = [
-    "johnny.jpg", "taeyong.jpg", "yuta.jpg", "kun.jpg", "doyoung.jpg", "ten.jpg",
-    "jaehyun.jpg", "winwin.jpg", "jungwoo.jpeg", "mark.jpg", "xiaojun.jpg", "hendery.jpg",
-    "renjun.jpg", "jeno.jpg", "haechan.jpg", "jaemin.jpg", "yangyang.jpg", "chenle.jpeg", "jisung.jpg"
-];
-
-// Initial stats
+// Initial config and stats
+let items, interval;
 let totalSeconds, moves, matches;
 
 /**
@@ -112,17 +94,16 @@ const getCards = (size) => {
 }
 
 /**
- * Generate puzzle grid.
+ * Generate the game grid.
  * @param size The size of the grid.
- * @param artist The key for the artist.
+ * @param artist The ID of the artist.
+ * @param cards The cards for the game.
  */
-const puzzleGenerator = (size, artist) => {
-    const cardNames = getCards(size);
-
+const generateGrid = (size, artist, cards) => {
     // Create cards: front side contains logo, back side contains photo of member
-    gameContainer.innerHTML = cardNames
+    gameContainer.innerHTML = cards
         .slice(0, size ** 2)
-        .map((card, i) => {
+        .map((card) => {
             // Handle the "free spot" case if there are an odd number of cards
             return card.name === "" ? `
                 <div class="blank">
@@ -140,67 +121,60 @@ const puzzleGenerator = (size, artist) => {
     // Generate grid
     gameContainer.style.gridTemplateRows = `repeat(${size}, auto)`;
     gameContainer.style.gridTemplateColumns = `repeat(${size}, auto)`;
+}
 
-    // Cards
-    cards = document.querySelectorAll(".card");
+/**
+ * Generate puzzle.
+ * @param size The size of the grid.
+ * @param artist The ID of the artist.
+ */
+const generatePuzzle = (size, artist) => {
+    generateGrid(size, artist, getCards(size));
+
+    let firstCard, secondCard;
+    const cards = document.querySelectorAll(".card");
+
     cards.forEach((card) => {
         card.addEventListener("click", () => {
-            // Flip a clicked card if it is unmatched
-            // Set card to the first/second selected card and store its value
-            if (!card.classList.contains("matched") && !card.classList.contains("flipped") && (!firstCard || !secondCard)) {
-                card.classList.add("flipped");
-                if (!firstCard) {
-                    firstCard = card;
-                    firstCardValue = card.getAttribute("card-value");
-                } else if (!secondCard) {
-                    // Increment moves
-                    movesCounter();
-                    secondCard = card;
-                    let secondCardValue = card.getAttribute("card-value");
-                    // Compare the values of first and second card
-                    if (firstCardValue === secondCardValue) {
-                        // If the cards match, add a matched attribute to the card
-                        firstCard.classList.add("matched");
-                        secondCard.classList.add("matched");
-                        firstCard = false;
-                        secondCard = false;
-                        // Increment win count
-                        // Check if it equals half the number of cards
-                        matches++;
-                        if (matches === Math.floor(cards.length / 2)) {
-                            [secondsElapsed, minutesElapsed] = getTimeDisplay(totalSeconds);
-                            setTimeout(() => {
-                                result.innerHTML = `
-                                    <h3>Well done!</h3>
-                                    <h4> Group: ${artist.toUpperCase()}</h4>
-                                    <h4> Moves: ${moves}</h4>
-                                    <h4>Time: ${minutesElapsed}:${secondsElapsed}</h4>
-                                    <h5>Choose a group:</h5>`;
-                                endGame();
-                                welcome.classList.add("hide");
-                            }, 1000);
-                        }
-                    } else {
-                        // If the cards don't match, flip both around
-                        tempFirstCard = firstCard;
-                        tempSecondCard = secondCard;
-                        setTimeout(() => {
-                            tempFirstCard.classList.remove("flipped");
-                            tempSecondCard.classList.remove("flipped");
-                            firstCard = false;
-                            secondCard = false;
-                        }, 750);
-                    }
+            // Ignore clicks on matched or flipped cards, and prevent flipping more than two cards;
+            if (card.classList.contains("matched") || card.classList.contains("flipped") || secondCard) return;
+            card.classList.add("flipped");
+
+            if (!firstCard) {
+                firstCard = card;
+            } else {
+                secondCard = card;
+                movesCounter();
+
+                // Compare the values of the first and second card
+                if (firstCard.getAttribute("card-value") === secondCard.getAttribute("card-value")) {
+                    // If the cards match, add a matched attribute to the card
+                    matches++;
+                    firstCard.classList.add("matched");
+                    secondCard.classList.add("matched");
+                    firstCard = secondCard = undefined;
+                } else {
+                    // If the cards don't match, flip both around
+                    setTimeout(() => {
+                        firstCard.classList.remove("flipped");
+                        secondCard.classList.remove("flipped");
+                        firstCard = secondCard = undefined;
+                    }, 750);
                 }
             }
+
+            // Check if game has been won
+            if (matches === Math.floor(cards.length / 2)) winGame(artist);
         });
     });
 };
 
 /**
  * Initialise the game.
+ * @param size The size of the grid.
+ * @param artist The ID of the artist.
  */
-const initialiseGame = () => {
+const initialiseGame = (size, artist) => {
     // Reset move count, matches and time
     moves = matches = totalSeconds = 0;
     movesCount.innerHTML = `<span>Moves: </span>0`;
@@ -213,27 +187,59 @@ const initialiseGame = () => {
     artistButtons.forEach(button => button.classList.add("hide"));
 
     // Generate puzzle and start timer
-    puzzleGenerator(size, artist);
+    generatePuzzle(size, artist);
     interval = setInterval(timeGenerator, 1000);
 };
 
-// Set game parameters based on the button ID (artist name) and start the game
-document.querySelectorAll(".buttons button").forEach(button => {
-    button.addEventListener("click", () => {
-        if (gameConfig[button.id]) {
-            artist = button.id;
-            ({ items, size } = gameConfig[artist]);
-            artistName.innerHTML = `<span>${gameConfig[artist].name}</span>`;
-            initialiseGame();
-        }
-    });
-});
+/**
+ * Configure the game.
+ * @param artist The ID of the artist.
+ */
+const configureGame = (artist) => {
+    const config = gameConfig[artist];
+    if (config) {
+        items = config.items;
+        artistName.innerHTML = `<span>${config.name}</span>`;
+        initialiseGame(config.size, artist);
+    }
+}
 
-// End the game.
-endButton.addEventListener("click", endGame = () => {
+/**
+ * End the game.
+ */
+const endGame = () => {
     controlsContainer.classList.remove("hide");
     welcome.classList.remove("hide");
     endButton.classList.add("hide");
     artistButtons.forEach(button => button.classList.remove("hide"));
     clearInterval(interval);
+}
+
+/**
+ * Win the game.
+ * @param artist The ID of the artist.
+ */
+const winGame = (artist) => {
+    let secondsElapsed, minutesElapsed;
+
+    [secondsElapsed, minutesElapsed] = getTimeDisplay(totalSeconds);
+    setTimeout(() => {
+        result.innerHTML = `
+                                <h3>Well done!</h3>
+                                <h4>Group: ${artist.toUpperCase()}</h4>
+                                <h4>Moves: ${moves}</h4>
+                                <h4>Time: ${minutesElapsed}:${secondsElapsed}</h4>
+                                <h5>Choose a group:</h5>`;
+        endGame();
+        welcome.classList.add("hide");
+    }, 750);
+}
+
+// Set game parameters based on the button ID (artist name) and start the game
+document.querySelectorAll(".buttons button").forEach(button => {
+    button.addEventListener("click", () => configureGame(button.id));
 });
+
+
+// End the game.
+endButton.addEventListener("click", () => endGame());
