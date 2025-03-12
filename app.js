@@ -5,6 +5,8 @@ const gameContainer = document.getElementById("game");
 const welcome = document.getElementById("welcome");
 const result = document.getElementById("result");
 const artistName = document.getElementById("name");
+
+const wrapperContainer = document.querySelector(".wrapper");
 const controlsContainer = document.querySelector(".controls");
 
 const artistButtons = [
@@ -119,8 +121,8 @@ const generateGrid = (size, artist, cards) => {
         .join("");
 
     // Generate grid
-    gameContainer.style.gridTemplateRows = `repeat(${size}, auto)`;
-    gameContainer.style.gridTemplateColumns = `repeat(${size}, auto)`;
+    gameContainer.style.gridTemplateRows = `repeat(${size}, 1fr)`;
+    gameContainer.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
 }
 
 /**
@@ -182,8 +184,8 @@ const initialiseGame = (size, artist) => {
     result.innerText = "";
 
     // Toggle visibility of UI elements
-    controlsContainer.classList.add("hide");
-    endButton.classList.remove("hide");
+    controlsContainer.style.display = "none";
+    wrapperContainer.style.display = "inline-block";
     artistButtons.forEach(button => button.classList.add("hide"));
 
     // Generate puzzle and start timer
@@ -208,9 +210,9 @@ const configureGame = (artist) => {
  * End the game.
  */
 const endGame = () => {
-    controlsContainer.classList.remove("hide");
+    controlsContainer.style.display = "flex";
+    wrapperContainer.style.display = "none";
     welcome.classList.remove("hide");
-    endButton.classList.add("hide");
     artistButtons.forEach(button => button.classList.remove("hide"));
     clearInterval(interval);
 }
@@ -229,7 +231,7 @@ const winGame = (artist) => {
                                 <h4>Group: ${artist.toUpperCase()}</h4>
                                 <h4>Moves: ${moves}</h4>
                                 <h4>Time: ${minutesElapsed}:${secondsElapsed}</h4>
-                                <h5>Choose a group:</h5>`;
+                                <h5>Select a group:</h5>`;
         endGame();
         welcome.classList.add("hide");
     }, 750);
