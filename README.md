@@ -30,9 +30,5 @@ The game ends either when all of the cards have been matched, or when the player
 <br>
 
 ## To run
-- The game is currently deployed at https://ns2001-kpop-memory.netlify.app/ 
+- The game is currently deployed at https://stephen-parinas-kpop-memory.netlify.app/ 
 - However, the images will load faster if you download the code and run from your machine.
-
-## To-do
-- Fix the formatting/layout for mobile devices and differently-sized windows.
-- Potentially add names of the members over their photo when their pair of cards has been matched.
