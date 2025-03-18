@@ -1,6 +1,6 @@
 # K-pop Memory Game
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/423da098-f252-4488-9557-b97feb4647fa/deploy-status)](https://app.netlify.com/sites/ns2001-kpop-memory/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/423da098-f252-4488-9557-b97feb4647fa/deploy-status)](https://app.netlify.com/sites/stephen-parinas-kpop-memory/deploys)
 
 ## About game
 - This is a clone of the popular card-matching game known as Concentration or Memory.
