@@ -40,9 +40,9 @@ const getItems = (folder, fileNames) => {
  * Game configuration.
  */
 const gameConfig = {
-    exo: { items: getItems("exo/", exoImages), size: 4, name: "EXO", logo: "exo/exo_logo2.jpeg", freeLogo: undefined },
-    svt: { items: getItems("svt/", svtImages), size: 5, name: "SEVENTEEN", logo: "svt/svt_icon2.png", freeLogo: "svt/svt_icon.webp" },
-    nct: { items: getItems("nct/", nctImages), size: 6, name: "NCT", logo: "nct/nct_logo.jpg", freeLogo: undefined }
+    exo: { items: getItems("assets/exo/", exoImages), size: 4, name: "EXO", logo: "assets/exo/exo_logo2.jpeg", freeLogo: undefined },
+    svt: { items: getItems("assets/svt/", svtImages), size: 5, name: "SEVENTEEN", logo: "assets/svt/svt_icon2.png", freeLogo: "assets/svt/svt_icon.webp" },
+    nct: { items: getItems("assets/nct/", nctImages), size: 6, name: "NCT", logo: "assets/nct/nct_logo.jpg", freeLogo: undefined }
 };
 
 /**
