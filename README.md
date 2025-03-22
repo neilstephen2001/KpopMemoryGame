@@ -1,7 +1,5 @@
 # K-pop Memory Game
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/423da098-f252-4488-9557-b97feb4647fa/deploy-status)](https://app.netlify.com/sites/stephen-parinas-kpop-memory/deploys)
-
 ## About game
 - This is a clone of the popular card-matching game known as Concentration or Memory.
 - This implementation is K-pop themed, where the cards contain images of members of the K-pop groups EXO, SEVENTEEN and NCT.
@@ -30,5 +28,5 @@ The game ends either when all of the cards have been matched, or when the player
 <br>
 
 ## To run
-- The game is currently deployed at https://stephen-parinas-kpop-memory.netlify.app/ 
+- The game is currently deployed on GitHub Pages: https://stephen-parinas.github.io/kpop-memory-game/
 - However, the images will load faster if you download the code and run from your machine.
